@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="music_queue">Music Queue</string>
+</resources>
