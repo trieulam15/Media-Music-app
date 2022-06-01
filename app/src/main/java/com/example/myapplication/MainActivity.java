@@ -56,10 +56,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void AddSong() {
         arraySong = new ArrayList<>();
-        arraySong.add(new Song("Horsehead Nebula", R.raw.Horsehead_Nebula));
-        arraySong.add(new Song("Blue Straggler", R.raw.Blue_Straggler));
-        arraySong.add(new Song("Stellar Formation", R.raw.Stellar_Formation));
-        arraySong.add(new Song("Vast, Immortal Suns", R.raw.Vast_Immortal_Suns));
+        arraySong.add(new Song("Horsehead Nebula", R.raw.horsehead_nebula));
+        arraySong.add(new Song("Stellar Formation", R.raw.stellar_formation));
+        arraySong.add(new Song("Vast, Immortal Suns", R.raw.vast_immortal_suns));
 
     }
 
