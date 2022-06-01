@@ -1,11 +1,12 @@
 package com.example.myapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
@@ -16,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
     ImageButton btNext, btPre, btPlay;
 
     ArrayList<Song> arraySong;
+    int Post = 0;
+    MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,11 +27,40 @@ public class MainActivity extends AppCompatActivity {
 
         Anhxa();
         AddSong();
+        MediaCreate();
+
+
+        btPlay.setOnClickListener(view -> {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.pause();
+                btPlay.setImageResource(R.drawable.ic_action_play_circle_filled);
+            } else {
+                mediaPlayer.start();
+                btPlay.setImageResource(R.drawable.ic_action_pause_circle_outline);
+            }
+        });
+
+        btNext.setOnClickListener(view -> {
+
+        });
+
+        btPre.setOnClickListener(view -> {
+
+        });
+    }
+
+    private void MediaCreate() {
+        mediaPlayer = MediaPlayer.create(MainActivity.this, arraySong.get(Post).getFile());
+        textviewTitle.setText(arraySong.get(Post).getTitle());
     }
 
     private void AddSong() {
         arraySong = new ArrayList<>();
-        arraySong.add(new Song());
+        arraySong.add(new Song("Horsehead Nebula", R.raw.Horsehead_Nebula));
+        arraySong.add(new Song("Blue Straggler", R.raw.Blue_Straggler));
+        arraySong.add(new Song("Stellar Formation", R.raw.Stellar_Formation));
+        arraySong.add(new Song("Vast, Immortal Suns", R.raw.Vast_Immortal_Suns));
+
     }
 
     private void Anhxa() {
