@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         Anhxa();
         AddSong();
         MediaCreate();
@@ -39,16 +41,28 @@ public class MainActivity extends AppCompatActivity {
                 btPlay.setImageResource(R.drawable.ic_action_pause_circle_outline);
             }
         });
+        mediaPlayer.setOnCompletionListener(mediaPlayer -> btNext.performClick());
 
-        btNext.setOnClickListener(view -> {
-
-        });
-
+        btNext.setOnClickListener(view ->{
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            Post = ((Post+1)%arraySong.size());
+            Uri u = Uri.parse(arraySong.get(Post).toString());
+            mediaPlayer = MediaPlayer.create(getApplicationContext(), u);
+            mediaPlayer.start();
+            btPlay.setImageResource(R.drawable.ic_action_pause_circle_outline);
+    });
         btPre.setOnClickListener(view -> {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            Post = ((Post-1)<0?(arraySong.size()-1):(Post-1));
+            Uri u = Uri.parse(arraySong.get(Post).toString());
+            mediaPlayer = MediaPlayer.create(getApplicationContext(), u);
+            mediaPlayer.start();
+            btPlay.setImageResource(R.drawable.ic_action_pause_circle_outline);
 
         });
     }
-
     private void MediaCreate() {
         mediaPlayer = MediaPlayer.create(MainActivity.this, arraySong.get(Post).getFile());
         textviewTitle.setText(arraySong.get(Post).getTitle());
@@ -59,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
         arraySong.add(new Song("Horsehead Nebula", R.raw.horsehead_nebula));
         arraySong.add(new Song("Stellar Formation", R.raw.stellar_formation));
         arraySong.add(new Song("Vast, Immortal Suns", R.raw.vast_immortal_suns));
-
     }
 
     private void Anhxa() {

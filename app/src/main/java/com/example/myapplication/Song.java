@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
-public class Song {
+import java.util.ArrayList;
+
+public class Song extends ArrayList<Song> {
     private final String Title;
     private final int File;
 
