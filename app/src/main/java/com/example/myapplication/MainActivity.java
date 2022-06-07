@@ -1,14 +1,16 @@
 package com.example.myapplication;
 
+import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,28 +42,89 @@ public class MainActivity extends AppCompatActivity {
                 mediaPlayer.start();
                 btPlay.setImageResource(R.drawable.ic_action_pause_circle_outline);
             }
+            setTimeTotal();
+            UpdateTimeSong();
         });
         mediaPlayer.setOnCompletionListener(mediaPlayer -> btNext.performClick());
 
         btNext.setOnClickListener(view ->{
-            mediaPlayer.stop();
-            mediaPlayer.release();
-            Post = ((Post+1)%arraySong.size());
-            Uri u = Uri.parse(arraySong.get(Post).toString());
-            mediaPlayer = MediaPlayer.create(getApplicationContext(), u);
+            Post++;
+            if (Post > arraySong.size() - 1)
+            {
+                Post = 0;
+            }
+            if(mediaPlayer.isPlaying()){
+                mediaPlayer.stop();
+                mediaPlayer.release();
+            }
+            MediaCreate();
             mediaPlayer.start();
             btPlay.setImageResource(R.drawable.ic_action_pause_circle_outline);
+            setTimeTotal();
+            UpdateTimeSong();
     });
         btPre.setOnClickListener(view -> {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-            Post = ((Post-1)<0?(arraySong.size()-1):(Post-1));
-            Uri u = Uri.parse(arraySong.get(Post).toString());
-            mediaPlayer = MediaPlayer.create(getApplicationContext(), u);
+            Post--;
+            if (Post < 0)
+            {
+                Post = arraySong.size() - 1;
+            }
+            if(mediaPlayer.isPlaying()){
+                mediaPlayer.stop();
+                mediaPlayer.release();
+            }
+            MediaCreate();
             mediaPlayer.start();
             btPlay.setImageResource(R.drawable.ic_action_pause_circle_outline);
-
+            setTimeTotal();
+            UpdateTimeSong();
         });
+        seekbar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                mediaPlayer.seekTo(seekbar1.getProgress());
+            }
+        });
+    }
+
+    private void UpdateTimeSong(){
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat dinhdangGio = new SimpleDateFormat("mm:ss");
+                time0.setText(dinhdangGio.format(mediaPlayer.getCurrentPosition()));
+                seekbar1.setProgress(mediaPlayer.getCurrentPosition());
+                mediaPlayer.setOnCompletionListener(mediaPlayerP -> {
+                    Post++;
+                    if (Post > arraySong.size() - 1)
+                    {
+                        Post = 0;
+                    }
+                    if(mediaPlayer.isPlaying()){
+                        mediaPlayer.stop();
+                        mediaPlayer.release();
+                    }
+                    MediaCreate();
+                    mediaPlayer.start();
+                    btPlay.setImageResource(R.drawable.ic_action_pause_circle_outline);
+                    setTimeTotal();
+                    UpdateTimeSong();
+                });
+                handler.postDelayed(this, 500);
+
+            }
+        }, 100);
     }
     private void MediaCreate() {
         mediaPlayer = MediaPlayer.create(MainActivity.this, arraySong.get(Post).getFile());
@@ -83,5 +146,10 @@ public class MainActivity extends AppCompatActivity {
         btNext = findViewById(R.id.btNext);
         btPre = findViewById(R.id.btPre);
         btPlay = findViewById(R.id.btPlay);
+    }
+    private void setTimeTotal(){
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dinhdang = new SimpleDateFormat("mm:ss");
+        time1.setText(dinhdang.format(mediaPlayer.getDuration()));
+        seekbar1.setMax(mediaPlayer.getDuration());
     }
 }
