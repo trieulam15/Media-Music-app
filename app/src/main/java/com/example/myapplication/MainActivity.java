@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         animation = AnimationUtils.loadAnimation(this, R.anim.spinlikehelikopter);
 
 
+
         btPlay.setOnClickListener(view -> {
             if (mediaPlayer.isPlaying()) {
                 mediaPlayer.pause();
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
             btPlay.setImageResource(R.drawable.ic_action_pause_circle_outline);
             setTimeTotal();
             UpdateTimeSong();
+            vynil.startAnimation(animation);
     });
         btPre.setOnClickListener(view -> {
             Post--;
@@ -86,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
             btPlay.setImageResource(R.drawable.ic_action_pause_circle_outline);
             setTimeTotal();
             UpdateTimeSong();
+            vynil.startAnimation(animation);
+
         });
         seekbar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
